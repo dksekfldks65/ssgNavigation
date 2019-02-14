@@ -1,28 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import CategoryFormList from './components/CategoryFormList';
 
 class App extends Component {
+  
+  constructor(){
+    super();
+    this.state={
+      loading: true,
+      categoryInfo: null,
+    }
+  }
+
+  async componentDidMount() {
+    const url      = "http://dev-static.ssgcdn.com/common/ui/json/ctg/ctg_6005_mo.json";
+    const response = await fetch(url);
+    const data     = await response.json();
+    this.setState({categoryInfo: data.CTG, loading:false})
+  };
+
   render() {
+
+    if(this.state.loading){
+      return <div>loading..</div>
+    }
+
+    if(!this.state.categoryInfo){
+      return <div>Didn't get a data</div>
+    }
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+    <div>
+      <nav id="_clnb_nav" className="clnb_nav">
+        <ul role="navigation" aria-label="공통 카테고리">
+          <CategoryFormList data={this.state.categoryInfo}/>
+        </ul>
+      </nav>
+    </div>
     );
   }
 }
 
-export default App;
+export 
+default App;
